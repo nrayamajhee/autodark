@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer that triggers autodark to change theme on sunset and sunrise
+
+[Timer]
+OnCalendar=*-*-* 01:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
