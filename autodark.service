@@ -1,0 +1,6 @@
+[Unit]
+Description=Schedule theme change at sunrise and sunrise
+
+[Service]
+Type=oneshot
+ExecStart=/home/nishan/.local/bin/autodark schedule
