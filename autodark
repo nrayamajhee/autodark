@@ -1,0 +1,64 @@
+#!/bin/bash
+
+decide() {
+	sunrise=`curl -X GET 'http://api.openweathermap.org/data/2.5/weather?zip=70148,us&APPID=86b00cb2e90213e0679873b97c9378fb' -H 'Content-Type: application/json' | jq '.sys.sunrise'`
+	sunset=`curl -X GET 'http://api.openweathermap.org/data/2.5/weather?zip=70148,us&APPID=86b00cb2e90213e0679873b97c9378fb' -H 'Content-Type: application/json' | jq '.sys.sunset'`
+	now=`date +'%s'`
+	local result=$(($now > $sunrise && $now < $sunset))
+	if [[ "$result" = "1" ]];then
+		return
+	fi
+	false
+}
+
+case $1 in
+	"on")
+		$0 gnome dark
+		# change the terminal theme
+		gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
+		jq '."workbench.colorTheme" = "Solarized Dark"' /home/nishan/.config/Code\ -\ OSS/User/settings.json > tmp.$$.json && mv -f tmp.$$.json /home/nishan/.config/Code\ -\ OSS/User/settings.json 
+	;;
+	"gnome")
+		case $2 in
+			"dark")
+				dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/background-color "'rgb(0,43,54)'" 
+				dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/foreground-color "'rgb(131,148,150)'"
+				gsettings set org.gnome.gedit.preferences.editor scheme "solarized-dark"
+			;;
+			"light")
+				dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/background-color "'rgb(253,246,227)'"
+				dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/foreground-color "'rgb(101,123,131)'"
+				gsettings set org.gnome.gedit.preferences.editor scheme "solarized-light"
+			;;
+		esac
+	;;
+	"off")
+		$0 gnome light
+		# change the terminal theme
+		gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"
+		jq '."workbench.colorTheme" = "Solarized Light"' /home/nishan/.config/Code\ -\ OSS/User/settings.json > tmp.$$.json && mv -f tmp.$$.json /home/nishan/.config/Code\ -\ OSS/User/settings.json 
+	;;
+	"auto" | "")
+		if decide; then
+			$0 off
+		else
+			$0 on
+		fi
+	;;
+	"schedule")
+		decide
+		echo Now: $now Sun rises at: $sunrise Sun sets at: $sunset
+		if (($now < $sunrise)); then
+				echo Trigger sunrise
+				systemd-run --user --on-calendar=@$sunrise $0
+		fi
+		if (($now < $sunset)); then
+				echo Trigger sunset
+				systemd-run --user --on-calendar=@$sunset $0
+		fi
+		$0
+	;;
+	"help" | *)
+		echo "dark on | off | auto | trigger | help"
+	;;
+esac
