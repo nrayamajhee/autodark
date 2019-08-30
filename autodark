@@ -12,12 +12,6 @@ decide() {
 }
 
 case $1 in
-	"on")
-		$0 gnome dark
-		# change the terminal theme
-		gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
-		jq '."workbench.colorTheme" = "Solarized Dark"' /home/nishan/.config/Code\ -\ OSS/User/settings.json > tmp.$$.json && mv -f tmp.$$.json /home/nishan/.config/Code\ -\ OSS/User/settings.json 
-	;;
 	"gnome")
 		case $2 in
 			"dark")
@@ -32,11 +26,27 @@ case $1 in
 			;;
 		esac
 	;;
+	"code")
+		case $2 in
+			"light")
+				jq '."workbench.colorTheme" = "Solarized Light"' /home/nishan/.config/Code\ -\ OSS/User/settings.json > tmp.$$.json && mv -f tmp.$$.json /home/nishan/.config/Code\ -\ OSS/User/settings.json 
+			;;
+			"dark")
+				jq '."workbench.colorTheme" = "Solarized Dark"' /home/nishan/.config/Code\ -\ OSS/User/settings.json > tmp.$$.json && mv -f tmp.$$.json /home/nishan/.config/Code\ -\ OSS/User/settings.json 
+			;;
+		esac
+	;;
+	"on")
+		$0 gnome dark
+		$0 code dark
+		# change the terminal theme
+		gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
+	;;
 	"off")
 		$0 gnome light
+		$0 code light
 		# change the terminal theme
 		gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"
-		jq '."workbench.colorTheme" = "Solarized Light"' /home/nishan/.config/Code\ -\ OSS/User/settings.json > tmp.$$.json && mv -f tmp.$$.json /home/nishan/.config/Code\ -\ OSS/User/settings.json 
 	;;
 	"auto" | "")
 		if decide; then
