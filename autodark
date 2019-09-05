@@ -40,15 +40,16 @@ case $1 in
 		esac
 	;;
 	"alacrrity")
+		cat ~/.config/autodark/alacritty.yml > ~/.config/alacritty/alacritty.yml
+		cat ~/.config/autodark/vimrc > ~/.vimrc
 		case $2 in
 			"dark")
-				cat ~/.config/autodark/alacritty.yml >> cat ~/.config/autodark/dark/alacritty.yml > ~/.config/alacritty/alacritty.yml
-				cat ~/.config/autodark/vimrc >> cat ~/.config/autodark/dark/vimrc > ~/.vimrc
+				cat ~/.config/autodark/dark/alacritty.yml >> ~/.config/alacritty/alacritty.yml
+				cat ~/.config/autodark/dark/vimrc >> ~/.vimrc
 			;;
 			"light")
-
-				cat ~/.config/autodark/alacritty.yml >> cat ~/.config/autodark/light/alacritty.yml > ~/.config/alacritty/alacritty.yml
-				cat ~/.config/autodark/vimrc >> cat ~/.config/autodark/light/vimrc > ~/.vimrc
+				cat ~/.config/autodark/light/alacritty.yml >> ~/.config/alacritty/alacritty.yml
+				cat ~/.config/autodark/light/vimrc >> ~/.vimrc
 			;;
 		esac
 	;;
