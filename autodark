@@ -41,15 +41,15 @@ case $1 in
 	;;
 	"alacrrity")
 		cat ~/.config/autodark/alacritty.yml > ~/.config/alacritty/alacritty.yml
-		cat ~/.config/autodark/vimrc > ~/.vimrc
+		cat ~/.config/autodark/init.vim > ~/.config/nvim/init.vim
 		case $2 in
 			"dark")
 				cat ~/.config/autodark/dark/alacritty.yml >> ~/.config/alacritty/alacritty.yml
-				cat ~/.config/autodark/dark/vimrc >> ~/.vimrc
+				cat ~/.config/autodark/dark/init.vim >> ~/.config/nvim/init.vim
 			;;
 			"light")
 				cat ~/.config/autodark/light/alacritty.yml >> ~/.config/alacritty/alacritty.yml
-				cat ~/.config/autodark/light/vimrc >> ~/.vimrc
+				cat ~/.config/autodark/light/init.vim >> ~/.config/nvim/init.vim
 			;;
 		esac
 	;;
@@ -65,15 +65,15 @@ case $1 in
 	;;
 	"on")
 		$0 gnome dark
-		$0 code dark
+		#$0 code dark
 		$0 alacrrity dark
-		echo "--theme=\"OneHalfDark\"" > ~/.config/bat/config
+		echo "--theme=\"Solarized (dark)\"" > ~/.config/bat/config
 	;;
 	"off")
 		$0 gnome light
-		$0 code light
+		#$0 code light
 		$0 alacrrity light
-		echo "--theme=\"OneHalfLight\"" > ~/.config/bat/config
+		echo "--theme=\"Solarized (light)\"" > ~/.config/bat/config
 	;;
 	"auto" | "")
 		if decide; then
